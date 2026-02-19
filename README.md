@@ -1,2 +1,2 @@
 # fastapi-observer
-FastApi Logs visualization 
+FastApi Logs visualization

@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fastapi-observer"
+version = "0.1.0"
+description = "Logging and observability helpers for FastAPI applications."
+readme = "README.md"
+requires-python = ">=3.10,<3.15"
+license = { file = "LICENSE" }
+authors = [{ name = "fastapi-observer maintainers" }]
+dependencies = [
+  "pydantic>=2.0,<3.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8.0",
+]
+dev = [
+  "pre-commit>=3.7",
+  "black>=24.10",
+]
+
+[tool.setuptools.packages.find]
+include = ["fastapi_observer*"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
