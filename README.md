@@ -2,6 +2,11 @@
 
 FastAPI Observer provides structured logging and observability helpers for FastAPI applications.
 
+[![Test](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/tests.yml/badge.svg)](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/tests.yml)
+[![coverage](https://img.shields.io/badge/coverage-pending-lightgrey?logo=pytest)](#tests-and-coverage)
+[![pypi package](https://img.shields.io/pypi/v/fastapi-observer?logo=pypi&label=pypi%20package)](https://pypi.org/project/fastapi-observer/)
+[![python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-brightgreen?logo=python&logoColor=white)](#python-compatibility)
+
 ## Python compatibility
 
 - Supported Python versions: `3.10`, `3.11`, `3.12`, `3.13`, `3.14`
