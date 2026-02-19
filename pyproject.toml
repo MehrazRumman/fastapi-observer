@@ -11,11 +11,13 @@ requires-python = ">=3.10,<3.15"
 license = { file = "LICENSE" }
 authors = [{ name = "fastapi-observer maintainers" }]
 dependencies = [
+  "fastapi>=0.100,<1.0",
   "pydantic>=2.0,<3.0",
 ]
 
 [project.optional-dependencies]
 test = [
+  "httpx>=0.24",
   "pytest>=8.0",
   "pytest-cov>=5.0",
 ]
