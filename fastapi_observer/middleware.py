@@ -113,11 +113,9 @@ if _IMPORT_ERROR is None:
                 raise
 
             duration_ms = round((time.perf_counter() - start) * 1000, 3)
-            response_body_for_log = (
-                self._extract_response_body_for_log(response)
-                if self.config.log_response_body
-                else None
-            )
+            response_body_for_log: Any | None = None
+            if self.config.log_response_body:
+                response, response_body_for_log = await self._capture_response_for_log(response)
 
             log_event(
                 self.logger,
@@ -179,15 +177,37 @@ if _IMPORT_ERROR is None:
                 metadata["response_body"] = response_body
             return metadata
 
-        def _extract_response_body_for_log(self, response: Response) -> Any | None:
+        async def _capture_response_for_log(
+            self, response: Response
+        ) -> tuple[Response, Any | None]:
             body = getattr(response, "body", None)
-            if body is None:
-                return None
             if isinstance(body, bytes):
-                return self._format_body_for_log(body)
+                return response, self._format_body_for_log(body)
             if isinstance(body, str):
-                return self._format_body_for_log(body.encode("utf-8"))
-            return None
+                return response, self._format_body_for_log(body.encode("utf-8"))
+
+            body_iterator = getattr(response, "body_iterator", None)
+            if body_iterator is None:
+                return response, None
+
+            chunks: list[bytes] = []
+            async for chunk in body_iterator:
+                if isinstance(chunk, bytes):
+                    chunks.append(chunk)
+                else:
+                    chunks.append(str(chunk).encode("utf-8"))
+            body_bytes = b"".join(chunks)
+
+            headers = dict(response.headers)
+            headers.pop("content-length", None)
+            replay_response = Response(
+                content=body_bytes,
+                status_code=response.status_code,
+                headers=headers,
+                media_type=response.media_type,
+                background=response.background,
+            )
+            return replay_response, self._format_body_for_log(body_bytes)
 
         def _format_body_for_log(self, body: bytes) -> Any:
             body_size = len(body)

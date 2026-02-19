@@ -1,16 +1,11 @@
 import logging
 
-import pytest
-
-fastapi = pytest.importorskip("fastapi")
-testclient = pytest.importorskip("fastapi.testclient")
+# import httpx
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
 
 from fastapi_observer.config import ObserverConfig
 from fastapi_observer.middleware import ObserverMiddleware
-
-FastAPI = fastapi.FastAPI
-TestClient = testclient.TestClient
-
 
 class InMemoryHandler(logging.Handler):
     def __init__(self) -> None:
