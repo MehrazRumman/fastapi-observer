@@ -38,3 +38,11 @@ jobs:
 
       - name: Run tests via tox
         run: tox -e ${{ matrix.toxenv }}
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.python-version }}
+          path: coverage.xml
+          if-no-files-found: ignore

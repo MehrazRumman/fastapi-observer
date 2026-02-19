@@ -4,12 +4,16 @@ on:
   push:
     paths:
       - "docs/**"
+      - "mkdocs.yml"
       - "README.md"
+      - "pyproject.toml"
       - ".github/workflows/docs.yml"
   pull_request:
     paths:
       - "docs/**"
+      - "mkdocs.yml"
       - "README.md"
+      - "pyproject.toml"
       - ".github/workflows/docs.yml"
 
 jobs:
@@ -19,7 +23,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Verify docs layout
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install docs dependencies
         run: |
-          test -f README.md
-          test -d docs
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[docs]"
+
+      - name: Build docs
+        run: |
+          mkdocs build --strict
