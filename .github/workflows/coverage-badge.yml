@@ -2,7 +2,9 @@ name: Coverage Badge
 
 on:
   push:
-    branches: ["main"]
+    branches: ["**"]
+    paths-ignore:
+      - "assets/coverage.svg"
   workflow_dispatch:
 
 permissions:
@@ -39,5 +41,5 @@ jobs:
       - name: Commit updated badge
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(ci): update coverage badge"
+          commit_message: "chore(ci): update coverage badge [skip ci]"
           file_pattern: assets/coverage.svg
