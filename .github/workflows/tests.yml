@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   tox:
     name: Python ${{ matrix.python-version }} / ${{ matrix.toxenv }}
@@ -38,6 +41,15 @@ jobs:
 
       - name: Run tests via tox
         run: tox -e ${{ matrix.toxenv }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
+          flags: unittests
+          name: python-${{ matrix.python-version }}
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload coverage artifact
         if: always()
