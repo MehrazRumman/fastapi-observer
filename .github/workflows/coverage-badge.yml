@@ -27,8 +27,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[test]"
-          python -m pip install setuptools
-          python -m pip install coverage-badge
 
       - name: Run tests with coverage
         run: |
@@ -37,7 +35,7 @@ jobs:
       - name: Generate coverage badge
         run: |
           mkdir -p assets
-          coverage-badge -o assets/coverage.svg -f
+          python .github/scripts/generate_coverage_badge.py coverage.xml assets/coverage.svg
 
       - name: Commit updated badge
         uses: stefanzweifel/git-auto-commit-action@v5
