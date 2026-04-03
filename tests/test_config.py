@@ -110,3 +110,19 @@ def test_handlers_must_be_unique_and_non_empty():
         ObserverConfig(handlers=[])
     with pytest.raises(ValidationError):
         ObserverConfig(handlers=["console", "console"])
+
+
+def test_file_path_cannot_be_blank():
+    with pytest.raises(ValidationError):
+        ObserverConfig(handlers=["file"], file_path="   ")
+
+
+def test_correlation_id_header_must_be_non_empty():
+    with pytest.raises(ValidationError):
+        ObserverConfig(correlation_id_header="")
+
+
+def test_should_log_path_with_unprefixed_input():
+    config = ObserverConfig(include_paths=["/api"], exclude_paths=["/api/internal"])
+    assert config.should_log_path("api/users") is True
+    assert config.should_log_path("api/internal") is False

@@ -1,11 +1,14 @@
 import logging
 
-# import httpx
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+import pytest
 
 from fastapi_observer.config import ObserverConfig
+from fastapi_observer.filters import only_errors
 from fastapi_observer.middleware import ObserverMiddleware
+from fastapi_observer.storage import InMemoryEventStore, SQLiteEventStore
+
 
 class InMemoryHandler(logging.Handler):
     def __init__(self) -> None:
@@ -113,3 +116,177 @@ def test_middleware_logs_exceptions():
     assert event["message"] == "HTTP request failed"
     assert event["status_code"] == 500
     assert "something failed" in event["error"]
+
+
+def test_middleware_applies_custom_event_filters():
+    app = FastAPI()
+
+    @app.get("/ok")
+    async def ok():
+        return {"ok": True}
+
+    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.filter")
+    config = ObserverConfig()
+    app.add_middleware(
+        ObserverMiddleware,
+        config=config,
+        logger=logger,
+        event_filters=[only_errors],
+    )
+
+    client = TestClient(app)
+    response = client.get("/ok")
+
+    assert response.status_code == 200
+    assert memory.records == []
+
+
+def test_middleware_disabled_does_not_log():
+    app = FastAPI()
+
+    @app.get("/items")
+    async def items():
+        return {"ok": True}
+
+    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.disabled")
+    config = ObserverConfig(enabled=False)
+    app.add_middleware(ObserverMiddleware, config=config, logger=logger)
+
+    client = TestClient(app)
+    response = client.get("/items")
+
+    assert response.status_code == 200
+    assert memory.records == []
+
+
+def test_middleware_uses_existing_correlation_id_header():
+    app = FastAPI()
+
+    @app.get("/items")
+    async def items():
+        return {"ok": True}
+
+    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.correlation")
+    config = ObserverConfig()
+    app.add_middleware(ObserverMiddleware, config=config, logger=logger)
+
+    client = TestClient(app)
+    response = client.get("/items", headers={"X-Request-ID": "req-123"})
+
+    assert response.status_code == 200
+    assert response.headers["X-Request-ID"] == "req-123"
+    assert memory.records[0].event["correlation_id"] == "req-123"
+
+
+def test_middleware_does_not_log_headers_when_disabled():
+    app = FastAPI()
+
+    @app.get("/items")
+    async def items():
+        return {"ok": True}
+
+    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.noheaders")
+    config = ObserverConfig(log_headers=False)
+    app.add_middleware(ObserverMiddleware, config=config, logger=logger)
+
+    client = TestClient(app)
+    response = client.get("/items")
+
+    assert response.status_code == 200
+    event = memory.records[0].event
+    assert "headers" not in event["metadata"]
+
+
+def test_middleware_stores_logged_events_when_storage_is_provided():
+    app = FastAPI()
+
+    @app.get("/items")
+    async def items():
+        return {"ok": True}
+
+    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.store")
+    store = InMemoryEventStore()
+    config = ObserverConfig()
+    app.add_middleware(ObserverMiddleware, config=config, logger=logger, storage=store)
+
+    client = TestClient(app)
+    response = client.get("/items")
+
+    assert response.status_code == 200
+    assert len(memory.records) == 1
+    assert store.count() == 1
+    assert store.list_events()[0].path == "/items"
+
+
+def test_middleware_stores_logged_events_in_sqlite_storage(tmp_path):
+    app = FastAPI()
+
+    @app.get("/items")
+    async def items():
+        return {"ok": True}
+
+    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.sqlite")
+    store = SQLiteEventStore(tmp_path / "events.db")
+    config = ObserverConfig()
+    app.add_middleware(ObserverMiddleware, config=config, logger=logger, storage=store)
+
+    client = TestClient(app)
+    response = client.get("/items")
+
+    assert response.status_code == 200
+    assert len(memory.records) == 1
+    assert store.count() == 1
+    assert store.list_events()[0].path == "/items"
+
+    store.close()
+
+
+def test_middleware_accepts_event_store_alias(tmp_path):
+    app = FastAPI()
+
+    @app.get("/items")
+    async def items():
+        return {"ok": True}
+
+    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.alias")
+    store = SQLiteEventStore(tmp_path / "alias.db")
+    config = ObserverConfig()
+    app.add_middleware(
+        ObserverMiddleware,
+        config=config,
+        logger=logger,
+        event_store=store,
+    )
+
+    client = TestClient(app)
+    response = client.get("/items")
+
+    assert response.status_code == 200
+    assert len(memory.records) == 1
+    assert store.count() == 1
+
+    store.close()
+
+
+def test_middleware_rejects_conflicting_storage_aliases(tmp_path):
+    app = FastAPI()
+
+    @app.get("/items")
+    async def items():
+        return {"ok": True}
+
+    store_a = SQLiteEventStore(tmp_path / "a.db")
+    store_b = SQLiteEventStore(tmp_path / "b.db")
+
+    app.add_middleware(
+        ObserverMiddleware,
+        config=ObserverConfig(),
+        storage=store_a,
+        event_store=store_b,
+    )
+
+    with pytest.raises(ValueError, match="storage and event_store"):
+        TestClient(app).get("/items")
+
+    store_a.close()
+    store_b.close()

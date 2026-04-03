@@ -2,7 +2,9 @@ import json
 import logging
 
 from fastapi_observer.config import ObserverConfig
-from fastapi_observer.logger import build_logger, log_event
+from fastapi_observer.formatters import JsonFormatter as PackageJsonFormatter
+from fastapi_observer.formatters.text import TextFormatter
+from fastapi_observer.logger import JsonFormatter, build_logger, log_event
 from fastapi_observer.models import LogEvent
 
 
@@ -26,6 +28,20 @@ def test_build_logger_resets_handlers_between_calls(tmp_path):
 
     assert first is second
     assert len(second.handlers) == 2
+
+
+def test_build_logger_closes_replaced_handlers(tmp_path):
+    config = ObserverConfig(
+        handlers=["file"],
+        file_path=str(tmp_path / "api.log"),
+    )
+    logger_name = "fastapi_observer.test.handler_cleanup"
+    logger = build_logger(config, logger_name=logger_name)
+    first_handler = logger.handlers[0]
+
+    build_logger(config, logger_name=logger_name)
+
+    assert first_handler.stream is None or first_handler.stream.closed
 
 
 def test_log_event_writes_json_payload_to_file(tmp_path):
@@ -59,3 +75,36 @@ def test_log_event_writes_json_payload_to_file(tmp_path):
     assert payload["event"]["path"] == "/api/users"
     assert payload["event"]["status_code"] == 200
     assert payload["event"]["metadata"] == {"user_id": 42}
+
+
+def test_build_logger_uses_json_formatter_by_default():
+    config = ObserverConfig(handlers=["console"])
+    logger = build_logger(config, logger_name="fastapi_observer.test.logger.format")
+    assert isinstance(logger.handlers[0].formatter, JsonFormatter)
+
+
+def test_build_logger_uses_text_formatter_when_requested():
+    config = ObserverConfig(handlers=["console"], log_format="text")
+    logger = build_logger(config, logger_name="fastapi_observer.test.logger.text")
+    assert isinstance(logger.handlers[0].formatter, TextFormatter)
+
+
+def test_json_formatter_includes_extra_fields():
+    formatter = JsonFormatter()
+    record = logging.LogRecord(
+        name="test",
+        level=logging.INFO,
+        pathname=__file__,
+        lineno=1,
+        msg="hello",
+        args=(),
+        exc_info=None,
+    )
+    record.extra_key = "extra-value"
+    parsed = json.loads(formatter.format(record))
+    assert parsed["message"] == "hello"
+    assert parsed["extra_key"] == "extra-value"
+
+
+def test_json_formatter_is_exported_from_formatters_package():
+    assert PackageJsonFormatter is JsonFormatter

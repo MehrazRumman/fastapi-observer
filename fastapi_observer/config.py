@@ -1,22 +1,14 @@
 from __future__ import annotations
 
-from typing import Iterable, Literal
+from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
+
+from .utils import dedupe_preserve_order, normalize_path
 
 HandlerName = Literal["console", "file"]
 LogFormat = Literal["text", "json"]
 LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-
-
-def _dedupe_preserve_order(values: Iterable[str]) -> list[str]:
-    seen: set[str] = set()
-    unique: list[str] = []
-    for value in values:
-        if value not in seen:
-            unique.append(value)
-            seen.add(value)
-    return unique
 
 
 class ObserverConfig(BaseModel):
@@ -90,7 +82,7 @@ class ObserverConfig(BaseModel):
             items = list(value)
 
         normalized = [cls._normalize_single_path(item) for item in items]
-        return _dedupe_preserve_order(normalized)
+        return dedupe_preserve_order(normalized)
 
     @field_validator("exclude_methods", mode="before")
     @classmethod
@@ -108,7 +100,7 @@ class ObserverConfig(BaseModel):
             if not method:
                 raise ValueError("exclude_methods cannot contain blank values")
             normalized.append(method)
-        return _dedupe_preserve_order(normalized)
+        return dedupe_preserve_order(normalized)
 
     @field_validator("redact_headers", "redact_fields", mode="before")
     @classmethod
@@ -141,7 +133,7 @@ class ObserverConfig(BaseModel):
         return self
 
     def should_log_path(self, path: str) -> bool:
-        normalized_path = "/" if not path else self._normalize_single_path(path)
+        normalized_path = normalize_path(path, allow_blank_root=True)
 
         include_match = any(
             self._path_matches(normalized_path, include_path)
@@ -162,14 +154,7 @@ class ObserverConfig(BaseModel):
 
     @staticmethod
     def _normalize_single_path(path: object) -> str:
-        normalized = str(path).strip()
-        if not normalized:
-            raise ValueError("path values must be non-empty")
-        if not normalized.startswith("/"):
-            normalized = f"/{normalized}"
-        if len(normalized) > 1 and normalized.endswith("/"):
-            normalized = normalized.rstrip("/")
-        return normalized
+        return normalize_path(path)
 
     @staticmethod
     def _path_matches(path: str, pattern: str) -> bool:

@@ -4,11 +4,15 @@ import json
 import logging
 import time
 import uuid
+from collections.abc import Iterable
 from typing import Any, Callable
 
 from .config import ObserverConfig
+from .filters import EventFilter, FilterPipeline
 from .logger import build_logger, log_event
 from .models import LogEvent
+from .storage import EventStore
+from .utils import redact_headers, redact_sensitive, status_code_to_level
 
 try:
     from starlette.middleware.base import BaseHTTPMiddleware
@@ -18,40 +22,6 @@ except ModuleNotFoundError as exc:  # pragma: no cover - guarded runtime fallbac
     _IMPORT_ERROR = exc
 else:
     _IMPORT_ERROR = None
-
-
-def _redact_sensitive(value: Any, redact_fields: set[str]) -> Any:
-    if isinstance(value, dict):
-        redacted: dict[str, Any] = {}
-        for key, nested_value in value.items():
-            if str(key).lower() in redact_fields:
-                redacted[key] = "***"
-            else:
-                redacted[key] = _redact_sensitive(nested_value, redact_fields)
-        return redacted
-    if isinstance(value, list):
-        return [_redact_sensitive(item, redact_fields) for item in value]
-    return value
-
-
-def _redact_headers(headers: dict[str, str], redact_headers: set[str]) -> dict[str, str]:
-    result: dict[str, str] = {}
-    for key, value in headers.items():
-        if key.lower() in redact_headers:
-            result[key] = "***"
-        else:
-            result[key] = value
-    return result
-
-
-def _to_log_level(status_code: int) -> str:
-    if status_code >= 500:
-        return "ERROR"
-    if status_code >= 400:
-        return "WARNING"
-    return "INFO"
-
-
 if _IMPORT_ERROR is None:
 
     class ObserverMiddleware(BaseHTTPMiddleware):
@@ -61,10 +31,17 @@ if _IMPORT_ERROR is None:
             *,
             config: ObserverConfig | None = None,
             logger: logging.Logger | None = None,
+            storage: EventStore | None = None,
+            event_store: EventStore | None = None,
+            event_filters: Iterable[EventFilter] | None = None,
         ) -> None:
             super().__init__(app)
             self.config = config or ObserverConfig()
             self.logger = logger or build_logger(self.config)
+            if storage is not None and event_store is not None and storage is not event_store:
+                raise ValueError("storage and event_store refer to different objects")
+            self.event_store = event_store if event_store is not None else storage
+            self.filter_pipeline = FilterPipeline(event_filters)
 
         async def dispatch(
             self,
@@ -92,9 +69,7 @@ if _IMPORT_ERROR is None:
                 response = await call_next(request_for_next)
             except Exception as exc:
                 duration_ms = round((time.perf_counter() - start) * 1000, 3)
-                log_event(
-                    self.logger,
-                    self.config,
+                self._log_if_allowed(
                     LogEvent(
                         level="ERROR",
                         message="HTTP request failed",
@@ -108,7 +83,7 @@ if _IMPORT_ERROR is None:
                             request,
                             request_body=request_body_for_log,
                         ),
-                    ),
+                    )
                 )
                 raise
 
@@ -117,11 +92,9 @@ if _IMPORT_ERROR is None:
             if self.config.log_response_body:
                 response, response_body_for_log = await self._capture_response_for_log(response)
 
-            log_event(
-                self.logger,
-                self.config,
+            self._log_if_allowed(
                 LogEvent(
-                    level=_to_log_level(response.status_code),
+                    level=status_code_to_level(response.status_code),
                     message="HTTP request completed",
                     method=method,
                     path=path,
@@ -133,7 +106,7 @@ if _IMPORT_ERROR is None:
                         request_body=request_body_for_log,
                         response_body=response_body_for_log,
                     ),
-                ),
+                )
             )
 
             if correlation_id:
@@ -167,7 +140,7 @@ if _IMPORT_ERROR is None:
                     "port": request.client.port,
                 }
             if self.config.log_headers:
-                metadata["headers"] = _redact_headers(
+                metadata["headers"] = redact_headers(
                     dict(request.headers),
                     self.config.redact_headers,
                 )
@@ -176,6 +149,20 @@ if _IMPORT_ERROR is None:
             if response_body is not None:
                 metadata["response_body"] = response_body
             return metadata
+
+        def _log_if_allowed(self, event: LogEvent) -> None:
+            if self.filter_pipeline.should_log(event):
+                log_event(self.logger, self.config, event)
+                self._store_event(event)
+
+        def _store_event(self, event: LogEvent) -> None:
+            if self.event_store is None:
+                return
+            try:
+                self.event_store.append(event)
+            except Exception:
+                # Storage is optional; logging should not fail because persistence did.
+                pass
 
         async def _capture_response_for_log(
             self, response: Response
@@ -218,7 +205,7 @@ if _IMPORT_ERROR is None:
             except (UnicodeDecodeError, json.JSONDecodeError):
                 parsed = body_for_parse.decode("utf-8", errors="replace")
 
-            redacted = _redact_sensitive(parsed, self.config.redact_fields)
+            redacted = redact_sensitive(parsed, self.config.redact_fields)
             if body_size <= self.config.max_body_bytes:
                 return redacted
             return {

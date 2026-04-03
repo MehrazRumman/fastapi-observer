@@ -8,6 +8,13 @@ theme:
 nav:
   - Home: index.md
   - Installation: installation.md
+  - Quickstart: quickstart.md
+  - Configuration: configuration.md
+  - Handlers: handlers.md
+  - Dashboard: dashboard.md
+  - API Reference: api-reference.md
+  - Best Practices: best-practices.md
+  - Migration: migration.md
 
 markdown_extensions:
   - admonition
