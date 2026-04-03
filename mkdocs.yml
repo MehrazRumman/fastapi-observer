@@ -1,0 +1,23 @@
+site_name: FastAPI Observer
+site_description: Logging and observability helpers for FastAPI applications.
+repo_name: fastapi-observer
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Quickstart: quickstart.md
+  - Configuration: configuration.md
+  - Handlers: handlers.md
+  - Dashboard: dashboard.md
+  - API Reference: api-reference.md
+  - Best Practices: best-practices.md
+  - Migration: migration.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
