@@ -1,37 +1,27 @@
 # fastapi-observer
 
-FastAPI Observer provides structured logging and observability helpers for FastAPI applications.
+Structured logging and observability middleware for FastAPI applications.
 
 [![Test](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/tests.yml/badge.svg)](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/tests.yml)
 [![coverage](assets/coverage.svg)](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/coverage-badge.yml)
 [![pypi package](https://img.shields.io/pypi/v/fastapi-observer?logo=pypi&label=pypi%20package)](https://pypi.org/project/fastapi-observer/)
 [![python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-brightgreen?logo=python&logoColor=white)](#python-compatibility)
 
-## Python compatibility
+**[Documentation](https://mehrazrumman.github.io/fastapi-observer/)** · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
-- Supported Python versions: `3.10`, `3.11`, `3.12`, `3.13`, `3.14`
-- Enforced in CI with tox matrix: `py310`, `py311`, `py312`, `py313`, `py314`
+---
 
-## Package versions
+## Features
 
-### Runtime
+- **Zero-boilerplate middleware** — one line to log every request and response
+- **Structured events** — typed `LogEvent` objects with method, path, status code, latency, and more
+- **Pluggable storage** — in-memory, JSON file, JSON Lines, or SQLite backends
+- **Filter pipeline** — drop health-check noise, log only errors, or set a minimum latency threshold
+- **Built-in dashboard** — mount an event-inspector UI at any path in your app
+- **Multiple formatters** — plain-text or JSON output
+- **Python 3.10–3.14** with full CI coverage across all versions
 
-- `pydantic>=2.0,<3.0`
-
-### Testing
-
-- `pytest>=8.0`
-- `pytest-cov>=5.0`
-
-### Documentation
-
-- `mkdocs>=1.6`
-- `mkdocs-material>=9.5`
-
-### Development
-
-- `pre-commit>=3.7`
-- `black>=24.10`
+---
 
 ## Install
 
@@ -39,42 +29,101 @@ FastAPI Observer provides structured logging and observability helpers for FastA
 pip install fastapi-observer
 ```
 
-For development:
+---
+
+## Quick start
+
+### Basic logging
+
+```python
+from fastapi import FastAPI
+from fastapi_observer import ObserverConfig, ObserverMiddleware
+
+app = FastAPI()
+app.add_middleware(ObserverMiddleware, config=ObserverConfig())
+
+@app.get("/items")
+async def list_items():
+    return {"items": ["alpha", "beta", "gamma"]}
+```
+
+Every request is now logged to the console with method, path, status code, and latency.
+
+### Persist events and open the dashboard
+
+```python
+from fastapi import FastAPI
+from fastapi_observer import ObserverConfig, ObserverMiddleware, build_dashboard_app
+from fastapi_observer.storage import InMemoryEventStore
+
+app = FastAPI()
+store = InMemoryEventStore()
+
+app.add_middleware(ObserverMiddleware, config=ObserverConfig(), storage=store)
+app.mount("/dashboard", build_dashboard_app(store, title="Observer Dashboard"))
+```
+
+Open `http://localhost:8000/dashboard` to browse and inspect logged events.
+
+### Filter out noise
+
+```python
+from fastapi_observer import ObserverConfig, ObserverMiddleware, only_errors, min_duration_ms
+
+app.add_middleware(
+    ObserverMiddleware,
+    config=ObserverConfig(handlers=["console"], log_format="json"),
+    event_filters=[
+        only_errors,           # log 4xx/5xx responses only
+        min_duration_ms(50.0), # ignore fast responses
+    ],
+)
+```
+
+See the [examples/](examples/) directory for more patterns including SQLite storage and custom filters.
+
+---
+
+## Storage backends
+
+| Backend | Class | Use case |
+|---|---|---|
+| In-memory | `InMemoryEventStore` | Development, testing |
+| JSON file | `JsonFileEventStore` | Simple persistence |
+| JSON Lines | `JsonLinesEventStore` | Append-only log files |
+| SQLite | `SQLiteEventStore` | Queryable local storage |
+
+---
+
+## Python compatibility
+
+- Supported versions: `3.10`, `3.11`, `3.12`, `3.13`, `3.14`
+- Enforced in CI with a tox matrix across all versions
+
+---
+
+## Development
+
+Install all dependencies:
 
 ```bash
 pip install -e ".[test,docs,dev]"
+pre-commit install
 ```
-
-## Tests and coverage
 
 Run tests:
 
 ```bash
 pytest -q
+pytest -q --cov=fastapi_observer --cov-report=term-missing   # with coverage
+tox                                                           # full version matrix
 ```
 
-Run tests with coverage:
+Build and preview docs:
 
 ```bash
-pytest -q --cov=fastapi_observer --cov-report=term-missing --cov-report=xml
-```
-
-Run full Python version matrix locally:
-
-```bash
-tox
-```
-
-## Docs
-
-Build docs:
-
-```bash
+mkdocs serve        # http://127.0.0.1:8000
 mkdocs build --strict
 ```
 
-Serve docs locally:
-
-```bash
-mkdocs serve
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contribution guide.
