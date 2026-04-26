@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-04-26
+
+### Added
+- First stable release
+- Structured logging middleware for FastAPI (`ObserverMiddleware`)
+- Typed event model (`LogEvent`) with method, path, status code, latency, correlation ID
+- Configurable filter pipeline (`only_errors`, `min_duration_ms`, `exclude_paths`)
+- Multiple storage backends: `InMemoryEventStore`, `JsonFileEventStore`, `JsonLinesEventStore`, `SQLiteEventStore`
+- Built-in dashboard (`build_dashboard_app`) mountable at any path
+- Console and file log handlers with JSON and plain-text formatters
+- Full test suite (69 tests, 87% coverage across Python 3.10–3.14)
+- MkDocs documentation site deployed to GitHub Pages
+
 ## [0.2.1] - 2026-04-26
 
 ### Fixed
@@ -34,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MkDocs documentation site with quickstart, API reference, and best-practices guides
 - CI/CD pipelines for testing (Python 3.10–3.14), coverage badge, and PyPI publishing
 
-[Unreleased]: https://github.com/MehrazRumman/fastapi-inspector/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/MehrazRumman/fastapi-inspector/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/MehrazRumman/fastapi-inspector/releases/tag/v0.1.0
+[Unreleased]: https://github.com/MehrazRumman/fastapi-observer/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/MehrazRumman/fastapi-observer/compare/v0.2.1...v1.0.0
+[0.2.1]: https://github.com/MehrazRumman/fastapi-observer/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/MehrazRumman/fastapi-observer/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/MehrazRumman/fastapi-observer/releases/tag/v0.1.0
