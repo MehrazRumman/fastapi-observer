@@ -32,7 +32,7 @@ Thank you for your interest in contributing!
 pytest -q
 
 # Run with coverage report
-pytest --cov=fastapi_observer --cov-report=term-missing
+pytest --cov=fastapi_inspector --cov-report=term-missing
 
 # Run a specific test file
 pytest tests/test_middleware.py -v

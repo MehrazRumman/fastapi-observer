@@ -47,5 +47,5 @@ The storage package provides:
 
 ## Logger helpers
 
-- `build_logger(config, logger_name="fastapi_observer")`
+- `build_logger(config, logger_name="fastapi_inspector")`
 - `log_event(logger, config, event)`

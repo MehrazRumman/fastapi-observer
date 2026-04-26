@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from fastapi_observer.models import LogEvent
+from fastapi_inspector.models import LogEvent
 
 
 def test_log_event_normalizes_method_and_path():

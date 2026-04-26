@@ -27,7 +27,7 @@ Paths are normalized before matching:
 ## Example
 
 ```python
-from fastapi_observer import ObserverConfig
+from fastapi_inspector import ObserverConfig
 
 config = ObserverConfig(
     handlers=["console", "file"],

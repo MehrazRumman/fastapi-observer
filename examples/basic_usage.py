@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from fastapi_observer import ObserverConfig, ObserverMiddleware
+from fastapi_inspector import ObserverConfig, ObserverMiddleware
 
 app = FastAPI(title="FastAPI Observer Example")
 

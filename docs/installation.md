@@ -15,7 +15,7 @@ pip install -e ".[test,docs,dev]"
 ## Run tests locally
 
 ```bash
-pytest -q --cov=fastapi_observer --cov-report=term-missing --cov-report=xml
+pytest -q --cov=fastapi_inspector --cov-report=term-missing --cov-report=xml
 ```
 
 ## Run multi-version tests with tox

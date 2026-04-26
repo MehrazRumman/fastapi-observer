@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from fastapi_observer.config import ObserverConfig
+from fastapi_inspector.config import ObserverConfig
 
 
 def test_defaults():

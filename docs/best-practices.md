@@ -10,7 +10,7 @@
 ## Recommended baseline
 
 ```python
-from fastapi_observer import ObserverConfig
+from fastapi_inspector import ObserverConfig
 
 config = ObserverConfig(
     exclude_paths=["/health", "/metrics"],

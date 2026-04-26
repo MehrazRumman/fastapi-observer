@@ -30,7 +30,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          pytest -q --cov=fastapi_observer --cov-report=term-missing --cov-report=xml
+          pytest -q --cov=fastapi_inspector --cov-report=term-missing --cov-report=xml
 
       - name: Generate coverage badge
         run: |

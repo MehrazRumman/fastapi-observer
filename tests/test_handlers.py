@@ -3,8 +3,8 @@ from logging.handlers import RotatingFileHandler
 
 import pytest
 
-from fastapi_observer.config import ObserverConfig
-from fastapi_observer.handlers import (
+from fastapi_inspector.config import ObserverConfig
+from fastapi_inspector.handlers import (
     build_console_handler,
     build_file_handler,
     build_handlers,

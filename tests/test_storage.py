@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from fastapi_observer.models import LogEvent
-from fastapi_observer.storage import (
+from fastapi_inspector.models import LogEvent
+from fastapi_inspector.storage import (
     InMemoryEventStore,
     JsonFileEventStore,
     SQLiteEventStore,
@@ -12,12 +12,12 @@ from fastapi_observer.storage import (
 
 
 def test_storage_package_is_importable():
-    module = importlib.import_module("fastapi_observer.storage")
-    assert module.__name__ == "fastapi_observer.storage"
+    module = importlib.import_module("fastapi_inspector.storage")
+    assert module.__name__ == "fastapi_inspector.storage"
 
 
 def test_storage_package_has_init_file():
-    module = importlib.import_module("fastapi_observer.storage")
+    module = importlib.import_module("fastapi_inspector.storage")
     module_path = Path(module.__file__)
     assert module_path.name == "__init__.py"
 

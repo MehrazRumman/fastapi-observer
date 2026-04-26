@@ -1,16 +1,16 @@
 import json
 import logging
 
-from fastapi_observer.config import ObserverConfig
-from fastapi_observer.formatters import JsonFormatter as PackageJsonFormatter
-from fastapi_observer.formatters.text import TextFormatter
-from fastapi_observer.logger import JsonFormatter, build_logger, log_event
-from fastapi_observer.models import LogEvent
+from fastapi_inspector.config import ObserverConfig
+from fastapi_inspector.formatters import JsonFormatter as PackageJsonFormatter
+from fastapi_inspector.formatters.text import TextFormatter
+from fastapi_inspector.logger import JsonFormatter, build_logger, log_event
+from fastapi_inspector.models import LogEvent
 
 
 def test_build_logger_console_handler_only():
     config = ObserverConfig(handlers=["console"], log_format="text")
-    logger = build_logger(config, logger_name="fastapi_observer.test.console")
+    logger = build_logger(config, logger_name="fastapi_inspector.test.console")
 
     assert logger.level == logging.INFO
     assert len(logger.handlers) == 1
@@ -22,7 +22,7 @@ def test_build_logger_resets_handlers_between_calls(tmp_path):
         handlers=["console", "file"],
         file_path=str(tmp_path / "api.log"),
     )
-    logger_name = "fastapi_observer.test.rebuild"
+    logger_name = "fastapi_inspector.test.rebuild"
     first = build_logger(config, logger_name=logger_name)
     second = build_logger(config, logger_name=logger_name)
 
@@ -35,7 +35,7 @@ def test_build_logger_closes_replaced_handlers(tmp_path):
         handlers=["file"],
         file_path=str(tmp_path / "api.log"),
     )
-    logger_name = "fastapi_observer.test.handler_cleanup"
+    logger_name = "fastapi_inspector.test.handler_cleanup"
     logger = build_logger(config, logger_name=logger_name)
     first_handler = logger.handlers[0]
 
@@ -51,7 +51,7 @@ def test_log_event_writes_json_payload_to_file(tmp_path):
         file_path=str(file_path),
         log_format="json",
     )
-    logger = build_logger(config, logger_name="fastapi_observer.test.file")
+    logger = build_logger(config, logger_name="fastapi_inspector.test.file")
 
     event = LogEvent(
         level="INFO",
@@ -79,13 +79,13 @@ def test_log_event_writes_json_payload_to_file(tmp_path):
 
 def test_build_logger_uses_json_formatter_by_default():
     config = ObserverConfig(handlers=["console"])
-    logger = build_logger(config, logger_name="fastapi_observer.test.logger.format")
+    logger = build_logger(config, logger_name="fastapi_inspector.test.logger.format")
     assert isinstance(logger.handlers[0].formatter, JsonFormatter)
 
 
 def test_build_logger_uses_text_formatter_when_requested():
     config = ObserverConfig(handlers=["console"], log_format="text")
-    logger = build_logger(config, logger_name="fastapi_observer.test.logger.text")
+    logger = build_logger(config, logger_name="fastapi_inspector.test.logger.text")
     assert isinstance(logger.handlers[0].formatter, TextFormatter)
 
 
