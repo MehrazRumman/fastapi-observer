@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fastapi-inspector"
-version = "0.2.0"
+version = "0.2.1"
 description = "Logging and observability helpers for FastAPI applications."
 readme = "README.md"
 requires-python = ">=3.10,<3.15"
@@ -31,11 +31,11 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/MehrazRumman/fastapi-inspector"
-Documentation = "https://mehrazrumman.github.io/fastapi-inspector/"
-Repository = "https://github.com/MehrazRumman/fastapi-inspector.git"
-Issues = "https://github.com/MehrazRumman/fastapi-inspector/issues"
-Changelog = "https://github.com/MehrazRumman/fastapi-inspector/blob/main/CHANGELOG.md"
+Homepage = "https://mehrazrumman.github.io/fastapi-observer/"
+Documentation = "https://mehrazrumman.github.io/fastapi-observer/"
+Repository = "https://github.com/MehrazRumman/fastapi-observer"
+Issues = "https://github.com/MehrazRumman/fastapi-observer/issues"
+Changelog = "https://github.com/MehrazRumman/fastapi-observer/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 test = [
