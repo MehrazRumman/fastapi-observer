@@ -1,11 +1,11 @@
-from fastapi_observer.filters import (
+from fastapi_inspector.filters import (
     FilterPipeline,
     exclude_paths,
     min_duration_ms,
     min_status_code,
     only_errors,
 )
-from fastapi_observer.models import LogEvent
+from fastapi_inspector.models import LogEvent
 
 
 def test_only_errors_filter():

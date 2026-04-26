@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 
-from fastapi_observer import (
+from fastapi_inspector import (
     ObserverConfig,
     ObserverMiddleware,
     build_dashboard_app,
 )
-from fastapi_observer.storage import InMemoryEventStore
+from fastapi_inspector.storage import InMemoryEventStore
 
 app = FastAPI(title="FastAPI Observer Dashboard Example")
 store = InMemoryEventStore()

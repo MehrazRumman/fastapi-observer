@@ -4,7 +4,7 @@ Add the middleware to a FastAPI app and choose the logging behavior through `Obs
 
 ```python
 from fastapi import FastAPI
-from fastapi_observer import ObserverConfig, ObserverMiddleware
+from fastapi_inspector import ObserverConfig, ObserverMiddleware
 
 app = FastAPI()
 
@@ -29,7 +29,7 @@ app.add_middleware(ObserverMiddleware, config=config)
 
 ```python
 from fastapi import FastAPI
-from fastapi_observer import ObserverConfig, ObserverMiddleware
+from fastapi_inspector import ObserverConfig, ObserverMiddleware
 
 app = FastAPI()
 app.add_middleware(ObserverMiddleware, config=ObserverConfig())

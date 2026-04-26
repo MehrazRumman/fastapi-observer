@@ -1,4 +1,4 @@
-from fastapi_observer.utils import (
+from fastapi_inspector.utils import (
     dedupe_preserve_order,
     normalize_path,
     redact_headers,

@@ -4,10 +4,10 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 import pytest
 
-from fastapi_observer.config import ObserverConfig
-from fastapi_observer.filters import only_errors
-from fastapi_observer.middleware import ObserverMiddleware
-from fastapi_observer.storage import InMemoryEventStore, SQLiteEventStore
+from fastapi_inspector.config import ObserverConfig
+from fastapi_inspector.filters import only_errors
+from fastapi_inspector.middleware import ObserverMiddleware
+from fastapi_inspector.storage import InMemoryEventStore, SQLiteEventStore
 
 
 class InMemoryHandler(logging.Handler):
@@ -36,7 +36,7 @@ def test_middleware_logs_completed_request_and_sets_correlation_id():
     async def read_items():
         return {"ok": True}
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.success")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.success")
     config = ObserverConfig(log_headers=True)
     app.add_middleware(ObserverMiddleware, config=config, logger=logger)
 
@@ -62,7 +62,7 @@ def test_middleware_skips_excluded_path():
     async def health():
         return {"ok": True}
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.exclude")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.exclude")
     config = ObserverConfig()
     app.add_middleware(ObserverMiddleware, config=config, logger=logger)
 
@@ -80,7 +80,7 @@ def test_middleware_logs_request_and_response_body_with_redaction():
     async def echo(payload: dict):
         return payload
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.body")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.body")
     config = ObserverConfig(log_request_body=True, log_response_body=True)
     app.add_middleware(ObserverMiddleware, config=config, logger=logger)
 
@@ -103,7 +103,7 @@ def test_middleware_logs_exceptions():
     async def boom():
         raise RuntimeError("something failed")
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.error")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.error")
     config = ObserverConfig()
     app.add_middleware(ObserverMiddleware, config=config, logger=logger)
 
@@ -125,7 +125,7 @@ def test_middleware_applies_custom_event_filters():
     async def ok():
         return {"ok": True}
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.filter")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.filter")
     config = ObserverConfig()
     app.add_middleware(
         ObserverMiddleware,
@@ -148,7 +148,7 @@ def test_middleware_disabled_does_not_log():
     async def items():
         return {"ok": True}
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.disabled")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.disabled")
     config = ObserverConfig(enabled=False)
     app.add_middleware(ObserverMiddleware, config=config, logger=logger)
 
@@ -166,7 +166,7 @@ def test_middleware_uses_existing_correlation_id_header():
     async def items():
         return {"ok": True}
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.correlation")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.correlation")
     config = ObserverConfig()
     app.add_middleware(ObserverMiddleware, config=config, logger=logger)
 
@@ -185,7 +185,7 @@ def test_middleware_does_not_log_headers_when_disabled():
     async def items():
         return {"ok": True}
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.noheaders")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.noheaders")
     config = ObserverConfig(log_headers=False)
     app.add_middleware(ObserverMiddleware, config=config, logger=logger)
 
@@ -204,7 +204,7 @@ def test_middleware_stores_logged_events_when_storage_is_provided():
     async def items():
         return {"ok": True}
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.store")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.store")
     store = InMemoryEventStore()
     config = ObserverConfig()
     app.add_middleware(ObserverMiddleware, config=config, logger=logger, storage=store)
@@ -225,7 +225,7 @@ def test_middleware_stores_logged_events_in_sqlite_storage(tmp_path):
     async def items():
         return {"ok": True}
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.sqlite")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.sqlite")
     store = SQLiteEventStore(tmp_path / "events.db")
     config = ObserverConfig()
     app.add_middleware(ObserverMiddleware, config=config, logger=logger, storage=store)
@@ -248,7 +248,7 @@ def test_middleware_accepts_event_store_alias(tmp_path):
     async def items():
         return {"ok": True}
 
-    logger, memory = _build_memory_logger("fastapi_observer.test.middleware.alias")
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.alias")
     store = SQLiteEventStore(tmp_path / "alias.db")
     config = ObserverConfig()
     app.add_middleware(

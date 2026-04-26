@@ -14,8 +14,8 @@
 The dashboard works with any object that implements the `EventStore` protocol.
 
 ```python
-from fastapi_observer.dashboard import build_dashboard_app
-from fastapi_observer.storage import InMemoryEventStore
+from fastapi_inspector.dashboard import build_dashboard_app
+from fastapi_inspector.storage import InMemoryEventStore
 
 app = build_dashboard_app(InMemoryEventStore())
 ```

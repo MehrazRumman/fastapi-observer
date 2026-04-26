@@ -3,18 +3,18 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from fastapi_observer.dashboard import build_dashboard_app
-from fastapi_observer.models import LogEvent
-from fastapi_observer.storage import InMemoryEventStore
+from fastapi_inspector.dashboard import build_dashboard_app
+from fastapi_inspector.models import LogEvent
+from fastapi_inspector.storage import InMemoryEventStore
 
 
 def test_dashboard_package_is_importable():
-    module = importlib.import_module("fastapi_observer.dashboard")
-    assert module.__name__ == "fastapi_observer.dashboard"
+    module = importlib.import_module("fastapi_inspector.dashboard")
+    assert module.__name__ == "fastapi_inspector.dashboard"
 
 
 def test_dashboard_package_has_init_file():
-    module = importlib.import_module("fastapi_observer.dashboard")
+    module = importlib.import_module("fastapi_inspector.dashboard")
     module_path = Path(module.__file__)
     assert module_path.name == "__init__.py"
 

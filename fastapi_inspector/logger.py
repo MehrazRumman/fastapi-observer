@@ -18,7 +18,7 @@ _LEVEL_TO_INT: dict[str, int] = {
 
 
 def build_logger(
-    config: ObserverConfig, *, logger_name: str = "fastapi_observer"
+    config: ObserverConfig, *, logger_name: str = "fastapi_inspector"
 ) -> logging.Logger:
     logger = logging.getLogger(logger_name)
     logger.setLevel(config.log_level)
