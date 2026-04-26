@@ -23,5 +23,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MkDocs documentation site with quickstart, API reference, and best-practices guides
 - CI/CD pipelines for testing (Python 3.10–3.14), coverage badge, and PyPI publishing
 
-[Unreleased]: https://github.com/MehrazRumman/fastapi-observer/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/MehrazRumman/fastapi-observer/releases/tag/v0.1.0
+[Unreleased]: https://github.com/MehrazRumman/fastapi-inspector/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/MehrazRumman/fastapi-inspector/releases/tag/v0.1.0

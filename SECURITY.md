@@ -13,7 +13,7 @@ Please **do not** open a public GitHub issue for security vulnerabilities.
 Instead, report them by emailing **blackndmaroon@gmail.com** with the subject line:
 
 ```
-[fastapi-observer] Security vulnerability report
+[fastapi-inspector] Security vulnerability report
 ```
 
 Include as much of the following as you can:

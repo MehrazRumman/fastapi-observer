@@ -18,7 +18,7 @@ FastAPI Observer provides structured logging building blocks for FastAPI project
 ## Quick start
 
 ```bash
-pip install fastapi-observer
+pip install fastapi-inspector
 ```
 
 See [Installation](installation.md) for development, docs, and test commands.
