@@ -31,11 +31,11 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/MehrazRumman/fastapi-observer"
-Documentation = "https://mehrazrumman.github.io/fastapi-observer/"
-Repository = "https://github.com/MehrazRumman/fastapi-observer.git"
-Issues = "https://github.com/MehrazRumman/fastapi-observer/issues"
-Changelog = "https://github.com/MehrazRumman/fastapi-observer/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/MehrazRumman/fastapi-inspector"
+Documentation = "https://mehrazrumman.github.io/fastapi-inspector/"
+Repository = "https://github.com/MehrazRumman/fastapi-inspector.git"
+Issues = "https://github.com/MehrazRumman/fastapi-inspector/issues"
+Changelog = "https://github.com/MehrazRumman/fastapi-inspector/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 test = [
@@ -53,7 +53,7 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["fastapi_observer*"]
+include = ["fastapi_inspector*"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"
@@ -64,7 +64,7 @@ line-length = 88
 target-version = ["py310"]
 
 [tool.coverage.run]
-source = ["fastapi_observer"]
+source = ["fastapi_inspector"]
 branch = true
 
 [tool.coverage.report]

@@ -37,7 +37,7 @@ pip install fastapi-inspector
 
 ```python
 from fastapi import FastAPI
-from fastapi_observer import ObserverConfig, ObserverMiddleware
+from fastapi_inspector import ObserverConfig, ObserverMiddleware
 
 app = FastAPI()
 app.add_middleware(ObserverMiddleware, config=ObserverConfig())
@@ -53,8 +53,8 @@ Every request is now logged to the console with method, path, status code, and l
 
 ```python
 from fastapi import FastAPI
-from fastapi_observer import ObserverConfig, ObserverMiddleware, build_dashboard_app
-from fastapi_observer.storage import InMemoryEventStore
+from fastapi_inspector import ObserverConfig, ObserverMiddleware, build_dashboard_app
+from fastapi_inspector.storage import InMemoryEventStore
 
 app = FastAPI()
 store = InMemoryEventStore()
@@ -68,7 +68,7 @@ Open `http://localhost:8000/dashboard` to browse and inspect logged events.
 ### Filter out noise
 
 ```python
-from fastapi_observer import ObserverConfig, ObserverMiddleware, only_errors, min_duration_ms
+from fastapi_inspector import ObserverConfig, ObserverMiddleware, only_errors, min_duration_ms
 
 app.add_middleware(
     ObserverMiddleware,
@@ -115,7 +115,7 @@ Run tests:
 
 ```bash
 pytest -q
-pytest -q --cov=fastapi_observer --cov-report=term-missing   # with coverage
+pytest -q --cov=fastapi_inspector --cov-report=term-missing   # with coverage
 tox                                                           # full version matrix
 ```
 
