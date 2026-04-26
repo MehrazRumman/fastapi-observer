@@ -1,13 +1,13 @@
-# fastapi-observer
+# fastapi-inspector
 
 Structured logging and observability middleware for FastAPI applications.
 
-[![Test](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/tests.yml/badge.svg)](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/tests.yml)
-[![coverage](assets/coverage.svg)](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/coverage-badge.yml)
-[![pypi package](https://img.shields.io/pypi/v/fastapi-observer?logo=pypi&label=pypi%20package)](https://pypi.org/project/fastapi-observer/)
+[![Test](https://github.com/MehrazRumman/fastapi-inspector/actions/workflows/tests.yml/badge.svg)](https://github.com/MehrazRumman/fastapi-inspector/actions/workflows/tests.yml)
+[![coverage](assets/coverage.svg)](https://github.com/MehrazRumman/fastapi-inspector/actions/workflows/coverage-badge.yml)
+[![pypi package](https://img.shields.io/pypi/v/fastapi-inspector?logo=pypi&label=pypi%20package)](https://pypi.org/project/fastapi-inspector/)
 [![python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-brightgreen?logo=python&logoColor=white)](#python-compatibility)
 
-**[Documentation](https://mehrazrumman.github.io/fastapi-observer/)** · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
+**[Documentation](https://mehrazrumman.github.io/fastapi-inspector/)** · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
 ---
 
@@ -26,7 +26,7 @@ Structured logging and observability middleware for FastAPI applications.
 ## Install
 
 ```bash
-pip install fastapi-observer
+pip install fastapi-inspector
 ```
 
 ---

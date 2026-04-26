@@ -1,6 +1,6 @@
-site_name: FastAPI Observer
+site_name: FastAPI Inspector
 site_description: Logging and observability helpers for FastAPI applications.
-repo_name: fastapi-observer
+repo_name: fastapi-inspector
 
 theme:
   name: material

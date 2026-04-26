@@ -3,7 +3,7 @@
 ## Runtime install
 
 ```bash
-pip install fastapi-observer
+pip install fastapi-inspector
 ```
 
 ## Development install
