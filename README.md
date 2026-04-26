@@ -2,8 +2,8 @@
 
 Structured logging and observability middleware for FastAPI applications.
 
-[![Test](https://github.com/MehrazRumman/fastapi-inspector/actions/workflows/tests.yml/badge.svg)](https://github.com/MehrazRumman/fastapi-inspector/actions/workflows/tests.yml)
-[![coverage](assets/coverage.svg)](https://github.com/MehrazRumman/fastapi-inspector/actions/workflows/coverage-badge.yml)
+[![Test](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/tests.yml/badge.svg)](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/tests.yml)
+[![coverage](https://raw.githubusercontent.com/MehrazRumman/fastapi-observer/main/assets/coverage.svg)](https://github.com/MehrazRumman/fastapi-observer/actions/workflows/coverage-badge.yml)
 [![pypi package](https://img.shields.io/pypi/v/fastapi-inspector?logo=pypi&label=pypi%20package)](https://pypi.org/project/fastapi-inspector/)
 [![python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-brightgreen?logo=python&logoColor=white)](#python-compatibility)
 
