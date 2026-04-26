@@ -2,6 +2,7 @@ name: Docs
 
 on:
   push:
+    branches: ["main"]
     paths:
       - "docs/**"
       - "mkdocs.yml"
@@ -15,9 +16,13 @@ on:
       - "README.md"
       - "pyproject.toml"
       - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  docs-check:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,6 +39,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e ".[docs]"
 
-      - name: Build docs
+      - name: Build and deploy docs
         run: |
-          mkdocs build --strict
+          mkdocs gh-deploy --force
