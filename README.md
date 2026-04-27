@@ -7,7 +7,7 @@ Structured logging and observability middleware for FastAPI applications.
 [![pypi package](https://img.shields.io/pypi/v/fastapi-inspector?logo=pypi&label=pypi%20package&cacheSeconds=300)](https://pypi.org/project/fastapi-inspector/)
 [![python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-brightgreen?logo=python&logoColor=white)](#python-compatibility)
 
-**[Documentation](https://mehrazrumman.github.io/fastapi-inspector/)** · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
+**[Documentation](https://mehrazrumman.github.io/fastapi-observer/)** · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
 ---
 

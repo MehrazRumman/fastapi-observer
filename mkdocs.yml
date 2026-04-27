@@ -1,6 +1,8 @@
 site_name: FastAPI Inspector
 site_description: Logging and observability helpers for FastAPI applications.
-repo_name: fastapi-inspector
+site_url: https://mehrazrumman.github.io/fastapi-observer/
+repo_url: https://github.com/MehrazRumman/fastapi-observer
+repo_name: MehrazRumman/fastapi-observer
 
 theme:
   name: material
