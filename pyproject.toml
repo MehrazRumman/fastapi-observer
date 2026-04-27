@@ -9,7 +9,7 @@ description = "Logging and observability helpers for FastAPI applications."
 readme = "README.md"
 requires-python = ">=3.10,<3.15"
 license = "MIT"
-authors = [{ name = "Mehraz Hossain Rumman", email = "blackndmaroon@gmail.com" }]
+authors = [{ name = "Mehraz Hossain Rumman", email = "mehrazrumman@gmail.com" }]
 keywords = ["fastapi", "logging", "observability", "middleware", "monitoring"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
