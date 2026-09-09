@@ -104,14 +104,12 @@ class SQLiteEventStore:
             check_same_thread=False,
         )
         with self._lock:
-            self._connection.execute(
-                """
+            self._connection.execute("""
                 CREATE TABLE IF NOT EXISTS events (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     payload TEXT NOT NULL
                 )
-                """
-            )
+                """)
             self._connection.commit()
 
     def append(self, event: LogEvent) -> None:

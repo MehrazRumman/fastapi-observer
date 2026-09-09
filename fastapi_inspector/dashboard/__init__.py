@@ -34,8 +34,13 @@ def build_dashboard_app(
         return _render_dashboard_page(title, event_store.list_events())
 
     @app.get("/events")
-    async def list_events(limit: int | None = Query(default=None, ge=0)) -> list[dict[str, Any]]:
-        return [event.model_dump(mode="json") for event in event_store.list_events(limit=limit)]
+    async def list_events(
+        limit: int | None = Query(default=None, ge=0)
+    ) -> list[dict[str, Any]]:
+        return [
+            event.model_dump(mode="json")
+            for event in event_store.list_events(limit=limit)
+        ]
 
     @app.delete("/events")
     async def clear_events() -> dict[str, int]:
@@ -258,7 +263,7 @@ def _render_event_rows(events: list[Any]) -> str:
         rows.append(
             "<tr>"
             f"<td>{escape(str(payload.get('timestamp', '')))}</td>"
-            f"<td><span class=\"pill pill-{escape(level_class)}\">{escape(level)}</span></td>"
+            f'<td><span class="pill pill-{escape(level_class)}">{escape(level)}</span></td>'
             f"<td>{escape(str(payload.get('method', '')))}</td>"
             f"<td><code>{escape(str(payload.get('path', '')))}</code></td>"
             f"<td>{escape('' if status_code is None else str(status_code))}</td>"

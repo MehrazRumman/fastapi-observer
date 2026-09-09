@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-09-09
+
+### Added
+- `fastapi_inspector.__version__` exposing the installed package version
+- PyPI downloads badge in the README
+
+### Changed
+- Test dependencies now include `httpx2`, which Starlette 1.x requires for its test client
+- Pinned `mkdocs<2` in the docs extra ahead of the MkDocs 2.0 plugin-system rewrite
+- Updated Black to 26.x and reformatted the code base
+- Bumped GitHub Actions to current majors (`checkout@v7`, `setup-python@v7`, `upload-artifact@v7`, `download-artifact@v8`, `git-auto-commit-action@v7`)
+- Docs workflow now only builds on pull requests and deploys on pushes to `main`
+
+### Fixed
+- Corrected repository links in `CONTRIBUTING.md` and the supported-versions table in `SECURITY.md`
+- Corrected homepage and documentation URLs in package metadata and MkDocs configuration
+- Updated author contact email in package metadata
+
 ## [1.0.0] - 2026-04-26
 
 ### Added
@@ -47,7 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MkDocs documentation site with quickstart, API reference, and best-practices guides
 - CI/CD pipelines for testing (Python 3.10–3.14), coverage badge, and PyPI publishing
 
-[Unreleased]: https://github.com/MehrazRumman/fastapi-observer/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/MehrazRumman/fastapi-observer/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/MehrazRumman/fastapi-observer/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/MehrazRumman/fastapi-observer/compare/v0.2.1...v1.0.0
 [0.2.1]: https://github.com/MehrazRumman/fastapi-observer/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/MehrazRumman/fastapi-observer/compare/v0.1.0...v0.2.0

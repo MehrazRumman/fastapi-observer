@@ -38,7 +38,11 @@ if _IMPORT_ERROR is None:
             super().__init__(app)
             self.config = config or ObserverConfig()
             self.logger = logger or build_logger(self.config)
-            if storage is not None and event_store is not None and storage is not event_store:
+            if (
+                storage is not None
+                and event_store is not None
+                and storage is not event_store
+            ):
                 raise ValueError("storage and event_store refer to different objects")
             self.event_store = event_store if event_store is not None else storage
             self.filter_pipeline = FilterPipeline(event_filters)
@@ -53,7 +57,9 @@ if _IMPORT_ERROR is None:
 
             path = request.url.path
             method = request.method
-            if not self.config.should_log_method(method) or not self.config.should_log_path(path):
+            if not self.config.should_log_method(
+                method
+            ) or not self.config.should_log_path(path):
                 return await call_next(request)
 
             correlation_id = self._resolve_correlation_id(request)
@@ -62,7 +68,9 @@ if _IMPORT_ERROR is None:
             if self.config.log_request_body:
                 body = await request.body()
                 request_body_for_log = self._format_body_for_log(body)
-                request_for_next = Request(request.scope, receive=_build_body_replay_receive(body))
+                request_for_next = Request(
+                    request.scope, receive=_build_body_replay_receive(body)
+                )
 
             start = time.perf_counter()
             try:
@@ -90,7 +98,9 @@ if _IMPORT_ERROR is None:
             duration_ms = round((time.perf_counter() - start) * 1000, 3)
             response_body_for_log: Any | None = None
             if self.config.log_response_body:
-                response, response_body_for_log = await self._capture_response_for_log(response)
+                response, response_body_for_log = await self._capture_response_for_log(
+                    response
+                )
 
             self._log_if_allowed(
                 LogEvent(
@@ -110,7 +120,9 @@ if _IMPORT_ERROR is None:
             )
 
             if correlation_id:
-                response.headers.setdefault(self.config.correlation_id_header, correlation_id)
+                response.headers.setdefault(
+                    self.config.correlation_id_header, correlation_id
+                )
             return response
 
         def _resolve_correlation_id(self, request: Request) -> str | None:
@@ -214,7 +226,6 @@ if _IMPORT_ERROR is None:
                 "content": redacted,
             }
 
-
     def _build_body_replay_receive(body: bytes) -> Callable[[], Any]:
         sent = False
 
@@ -226,7 +237,6 @@ if _IMPORT_ERROR is None:
             return {"type": "http.request", "body": b"", "more_body": False}
 
         return receive
-
 
 else:
 

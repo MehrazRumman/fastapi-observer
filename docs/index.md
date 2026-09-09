@@ -1,6 +1,6 @@
-# FastAPI Observer
+# FastAPI Inspector
 
-FastAPI Observer provides structured logging building blocks for FastAPI projects.
+FastAPI Inspector provides structured logging building blocks for FastAPI projects.
 
 ## Current scope
 
