@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PyPI downloads badge in the README
 
 ### Changed
+- Default dashboard title and example app titles now use the `FastAPI Inspector` name
 - Test dependencies now include `httpx2`, which Starlette 1.x requires for its test client
 - Pinned `mkdocs<2` in the docs extra ahead of the MkDocs 2.0 plugin-system rewrite
 - Updated Black to 26.x and reformatted the code base

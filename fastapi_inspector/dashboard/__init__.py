@@ -18,7 +18,7 @@ else:
 def build_dashboard_app(
     store: EventStore | None = None,
     *,
-    title: str = "FastAPI Observer Dashboard",
+    title: str = "FastAPI Inspector Dashboard",
 ) -> FastAPI:
     if _IMPORT_ERROR is not None:  # pragma: no cover - import-time guard only
         raise RuntimeError(
@@ -58,7 +58,7 @@ def build_dashboard_app(
 def create_dashboard_app(
     store: EventStore | None = None,
     *,
-    title: str = "FastAPI Observer Dashboard",
+    title: str = "FastAPI Inspector Dashboard",
 ) -> FastAPI:
     return build_dashboard_app(store, title=title)
 
@@ -213,7 +213,7 @@ def _render_dashboard_page(title: str, events: list[Any]) -> str:
     <header>
       <div>
         <h1>{escape(title)}</h1>
-        <p class="lede">A lightweight view of the structured request events captured by FastAPI Observer.</p>
+        <p class="lede">A lightweight view of the structured request events captured by FastAPI Inspector.</p>
       </div>
     </header>
     <section class="stats">

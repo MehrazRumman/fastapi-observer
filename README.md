@@ -50,6 +50,8 @@ async def list_items():
 
 Every request is now logged to the console with method, path, status code, and latency.
 
+The installed version is available as `fastapi_inspector.__version__`.
+
 ### Persist events and open the dashboard
 
 ```python

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from fastapi_inspector import ObserverConfig, ObserverMiddleware
 
-app = FastAPI(title="FastAPI Observer Example")
+app = FastAPI(title="FastAPI Inspector Example")
 
 app.add_middleware(ObserverMiddleware, config=ObserverConfig())
 

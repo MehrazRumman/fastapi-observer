@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi_inspector import ObserverConfig, ObserverMiddleware
 from fastapi_inspector.storage import SQLiteEventStore
 
-app = FastAPI(title="FastAPI Observer Database Example")
+app = FastAPI(title="FastAPI Inspector Database Example")
 store = SQLiteEventStore(":memory:")
 
 app.add_middleware(ObserverMiddleware, config=ObserverConfig(), storage=store)
