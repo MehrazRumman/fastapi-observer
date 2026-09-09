@@ -49,7 +49,9 @@ def redact_sensitive(value: Any, redact_fields: set[str]) -> Any:
     return value
 
 
-def redact_headers(headers: Mapping[str, str], redact_headers: set[str]) -> dict[str, str]:
+def redact_headers(
+    headers: Mapping[str, str], redact_headers: set[str]
+) -> dict[str, str]:
     result: dict[str, str] = {}
     for key, value in headers.items():
         if key.lower() in redact_headers:

@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 
-from fastapi_inspector import ObserverConfig, ObserverMiddleware, min_duration_ms, only_errors
+from fastapi_inspector import (
+    ObserverConfig,
+    ObserverMiddleware,
+    min_duration_ms,
+    only_errors,
+)
 
 app = FastAPI()
 

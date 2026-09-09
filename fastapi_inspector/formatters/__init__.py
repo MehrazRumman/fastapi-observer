@@ -4,7 +4,6 @@ import json
 import logging
 from typing import Any
 
-
 _BASE_RECORD_ATTRS = set(logging.makeLogRecord({}).__dict__.keys())
 
 
