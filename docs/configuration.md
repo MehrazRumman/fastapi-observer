@@ -10,7 +10,7 @@
 - `log_format`: `json` or `text`
 - `include_paths` / `exclude_paths`: route filtering
 - `exclude_methods`: skip methods such as `OPTIONS`
-- `log_request_body` / `log_response_body`: capture payloads
+- `log_request_body` / `log_response_body`: capture payloads (response capture covers textual bodies with a known length; streams such as server-sent events and binary payloads pass through uncaptured)
 - `max_body_bytes`: cap body capture size
 - `redact_headers` / `redact_fields`: sensitive-data masking
 - `correlation_id_header`: header used for request correlation

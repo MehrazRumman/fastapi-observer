@@ -11,10 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `py.typed` marker so type checkers use the package's inline type hints (PEP 561)
+- `max_page_events` option on `build_dashboard_app` / `create_dashboard_app` (default 200)
 
 ### Changed
 - Richer PyPI metadata: `Framework :: FastAPI`, `Framework :: Pydantic :: 2`, `Typing :: Typed`, and `OS Independent` classifiers, expanded keywords, and a clearer summary
 - Stopped tracking macOS `.DS_Store` files
+
+### Fixed
+- `log_response_body=True` no longer buffers streaming responses (such as server-sent events) or binary payloads; only textual bodies with a known length are captured
+- The dashboard page no longer loads every stored event; it shows the most recent `max_page_events` while the total count still reflects the whole store
 
 ## [1.0.1] - 2026-09-09
 

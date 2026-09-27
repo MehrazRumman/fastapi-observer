@@ -292,3 +292,47 @@ def test_middleware_rejects_conflicting_storage_aliases(tmp_path):
 
     store_a.close()
     store_b.close()
+
+
+def test_middleware_does_not_buffer_streaming_response_body():
+    from fastapi.responses import StreamingResponse
+
+    app = FastAPI()
+
+    @app.get("/stream")
+    async def stream():
+        async def chunks():
+            yield b"data: one\n\n"
+            yield b"data: two\n\n"
+
+        return StreamingResponse(chunks(), media_type="text/event-stream")
+
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.stream")
+    config = ObserverConfig(log_response_body=True)
+    app.add_middleware(ObserverMiddleware, config=config, logger=logger)
+
+    response = TestClient(app).get("/stream")
+
+    assert response.status_code == 200
+    assert response.text == "data: one\n\ndata: two\n\n"
+    assert len(memory.records) == 1
+    assert "response_body" not in memory.records[0].event["metadata"]
+
+
+def test_middleware_skips_binary_response_body():
+    from fastapi import Response
+
+    app = FastAPI()
+
+    @app.get("/image")
+    async def image():
+        return Response(content=b"\x89PNG\r\n", media_type="image/png")
+
+    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.binary")
+    config = ObserverConfig(log_response_body=True)
+    app.add_middleware(ObserverMiddleware, config=config, logger=logger)
+
+    response = TestClient(app).get("/image")
+
+    assert response.content == b"\x89PNG\r\n"
+    assert "response_body" not in memory.records[0].event["metadata"]

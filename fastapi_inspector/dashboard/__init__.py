@@ -19,11 +19,14 @@ def build_dashboard_app(
     store: EventStore | None = None,
     *,
     title: str = "FastAPI Inspector Dashboard",
+    max_page_events: int = 200,
 ) -> FastAPI:
     if _IMPORT_ERROR is not None:  # pragma: no cover - import-time guard only
         raise RuntimeError(
             "Dashboard helpers require FastAPI. Install the runtime dependency first."
         ) from _IMPORT_ERROR
+    if max_page_events < 1:
+        raise ValueError("max_page_events must be at least 1")
 
     event_store = store or InMemoryEventStore()
     app = FastAPI(title=title)
@@ -31,7 +34,11 @@ def build_dashboard_app(
 
     @app.get("/", response_class=HTMLResponse)
     async def dashboard_home() -> str:
-        return _render_dashboard_page(title, event_store.list_events())
+        return _render_dashboard_page(
+            title,
+            event_store.list_events(limit=max_page_events),
+            total_events=event_store.count(),
+        )
 
     @app.get("/events")
     async def list_events(
@@ -59,12 +66,16 @@ def create_dashboard_app(
     store: EventStore | None = None,
     *,
     title: str = "FastAPI Inspector Dashboard",
+    max_page_events: int = 200,
 ) -> FastAPI:
-    return build_dashboard_app(store, title=title)
+    return build_dashboard_app(store, title=title, max_page_events=max_page_events)
 
 
-def _render_dashboard_page(title: str, events: list[Any]) -> str:
-    total_events = len(events)
+def _render_dashboard_page(
+    title: str, events: list[Any], *, total_events: int | None = None
+) -> str:
+    if total_events is None:
+        total_events = len(events)
     latest = events[-1].timestamp.isoformat() if events else "n/a"
     rows = _render_event_rows(events)
     return f"""<!doctype html>
