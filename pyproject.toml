@@ -4,16 +4,31 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fastapi-inspector"
-version = "1.0.0"
-description = "Logging and observability helpers for FastAPI applications."
+version = "1.0.1"
+description = "Structured request logging, observability middleware, and a built-in event dashboard for FastAPI."
 readme = "README.md"
 requires-python = ">=3.10,<3.15"
 license = "MIT"
 authors = [{ name = "Mehraz Hossain Rumman", email = "blackndmaroon@gmail.com" }]
-keywords = ["fastapi", "logging", "observability", "middleware", "monitoring"]
+keywords = [
+  "fastapi",
+  "starlette",
+  "asgi",
+  "logging",
+  "structured-logging",
+  "observability",
+  "middleware",
+  "monitoring",
+  "request-logging",
+  "correlation-id",
+  "dashboard",
+]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
+  "Framework :: FastAPI",
+  "Framework :: Pydantic :: 2",
   "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -23,6 +38,8 @@ classifiers = [
   "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: System :: Logging",
+  "Topic :: System :: Monitoring",
+  "Typing :: Typed",
 ]
 
 dependencies = [
@@ -54,6 +71,9 @@ dev = [
 
 [tool.setuptools.packages.find]
 include = ["fastapi_inspector*"]
+
+[tool.setuptools.package-data]
+fastapi_inspector = ["py.typed"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"

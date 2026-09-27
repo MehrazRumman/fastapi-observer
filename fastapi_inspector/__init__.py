@@ -1,3 +1,5 @@
+from importlib.metadata import PackageNotFoundError, version
+
 from .config import ObserverConfig
 from .dashboard import build_dashboard_app, create_dashboard_app
 from .filters import (
@@ -19,7 +21,13 @@ from .storage import (
     SQLiteEventStore,
 )
 
+try:
+    __version__ = version("fastapi-inspector")
+except PackageNotFoundError:  # pragma: no cover - running from a source checkout
+    __version__ = "0.0.0"
+
 __all__ = [
+    "__version__",
     "ObserverConfig",
     "ObserverMiddleware",
     "LogEvent",

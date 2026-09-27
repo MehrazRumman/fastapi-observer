@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-09-27
+
+### Added
+- `py.typed` marker so type checkers use the package's inline type hints (PEP 561)
+- `fastapi_inspector.__version__`
+
+### Changed
+- Richer PyPI metadata: `Framework :: FastAPI`, `Framework :: Pydantic :: 2`, `Typing :: Typed`, and `OS Independent` classifiers, expanded keywords, and a clearer summary
+
 ## [1.0.0] - 2026-04-26
 
 ### Added
@@ -47,7 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MkDocs documentation site with quickstart, API reference, and best-practices guides
 - CI/CD pipelines for testing (Python 3.10–3.14), coverage badge, and PyPI publishing
 
-[Unreleased]: https://github.com/MehrazRumman/fastapi-observer/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/MehrazRumman/fastapi-observer/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/MehrazRumman/fastapi-observer/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/MehrazRumman/fastapi-observer/compare/v0.2.1...v1.0.0
 [0.2.1]: https://github.com/MehrazRumman/fastapi-observer/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/MehrazRumman/fastapi-observer/compare/v0.1.0...v0.2.0
