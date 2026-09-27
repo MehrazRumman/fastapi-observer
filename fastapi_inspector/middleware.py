@@ -179,6 +179,11 @@ if _IMPORT_ERROR is None:
         async def _capture_response_for_log(
             self, response: Response
         ) -> tuple[Response, Any | None]:
+            if not _is_capturable_response(response):
+                # Streams (e.g. server-sent events) and binary payloads pass through
+                # untouched; buffering them would stall or bloat the response.
+                return response, None
+
             body = getattr(response, "body", None)
             if isinstance(body, bytes):
                 return response, self._format_body_for_log(body)
@@ -225,6 +230,28 @@ if _IMPORT_ERROR is None:
                 "original_size": body_size,
                 "content": redacted,
             }
+
+    _TEXTUAL_MEDIA_TYPES = (
+        "application/json",
+        "application/problem+json",
+        "application/xml",
+        "application/x-www-form-urlencoded",
+    )
+
+    def _is_capturable_response(response: Response) -> bool:
+        if "content-length" not in response.headers:
+            return False
+        content_type = response.headers.get("content-type", "")
+        media_type = content_type.split(";", 1)[0].strip().lower()
+        if not media_type:
+            return True
+        if media_type == "text/event-stream":
+            return False
+        return (
+            media_type.startswith("text/")
+            or media_type.endswith("+json")
+            or media_type in _TEXTUAL_MEDIA_TYPES
+        )
 
     def _build_body_replay_receive(body: bytes) -> Callable[[], Any]:
         sent = False
