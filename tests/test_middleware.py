@@ -166,7 +166,9 @@ def test_middleware_uses_existing_correlation_id_header():
     async def items():
         return {"ok": True}
 
-    logger, memory = _build_memory_logger("fastapi_inspector.test.middleware.correlation")
+    logger, memory = _build_memory_logger(
+        "fastapi_inspector.test.middleware.correlation"
+    )
     config = ObserverConfig()
     app.add_middleware(ObserverMiddleware, config=config, logger=logger)
 

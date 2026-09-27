@@ -18,14 +18,26 @@ def test_only_errors_filter():
 
 def test_min_status_code_filter():
     filter_fn = min_status_code(500)
-    assert filter_fn(LogEvent(message="ok", method="GET", path="/x", status_code=200)) is False
-    assert filter_fn(LogEvent(message="bad", method="GET", path="/x", status_code=503)) is True
+    assert (
+        filter_fn(LogEvent(message="ok", method="GET", path="/x", status_code=200))
+        is False
+    )
+    assert (
+        filter_fn(LogEvent(message="bad", method="GET", path="/x", status_code=503))
+        is True
+    )
 
 
 def test_min_duration_filter():
     filter_fn = min_duration_ms(100.0)
-    assert filter_fn(LogEvent(message="fast", method="GET", path="/x", duration_ms=12.3)) is False
-    assert filter_fn(LogEvent(message="slow", method="GET", path="/x", duration_ms=250.0)) is True
+    assert (
+        filter_fn(LogEvent(message="fast", method="GET", path="/x", duration_ms=12.3))
+        is False
+    )
+    assert (
+        filter_fn(LogEvent(message="slow", method="GET", path="/x", duration_ms=250.0))
+        is True
+    )
 
 
 def test_exclude_paths_filter():
@@ -37,8 +49,12 @@ def test_exclude_paths_filter():
 
 def test_pipeline_applies_all_filters():
     pipeline = FilterPipeline([only_errors, min_status_code(500)])
-    allowed = LogEvent(message="err", method="GET", path="/x", level="ERROR", status_code=500)
-    denied = LogEvent(message="warn", method="GET", path="/x", level="WARNING", status_code=500)
+    allowed = LogEvent(
+        message="err", method="GET", path="/x", level="ERROR", status_code=500
+    )
+    denied = LogEvent(
+        message="warn", method="GET", path="/x", level="WARNING", status_code=500
+    )
 
     assert pipeline.should_log(allowed) is True
     assert pipeline.should_log(denied) is False

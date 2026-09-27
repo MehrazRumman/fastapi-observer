@@ -1,4 +1,4 @@
-from importlib.metadata import PackageNotFoundError, version
+from importlib.metadata import PackageNotFoundError, version as _pkg_version
 
 from .config import ObserverConfig
 from .dashboard import build_dashboard_app, create_dashboard_app
@@ -22,8 +22,8 @@ from .storage import (
 )
 
 try:
-    __version__ = version("fastapi-inspector")
-except PackageNotFoundError:  # pragma: no cover - running from a source checkout
+    __version__ = _pkg_version("fastapi-inspector")
+except PackageNotFoundError:  # pragma: no cover - source checkout without install
     __version__ = "0.0.0"
 
 __all__ = [

@@ -4,6 +4,7 @@
 
 The package root exports the main entry points:
 
+- `__version__` (the installed package version string)
 - `ObserverConfig`
 - `ObserverMiddleware`
 - `LogEvent`

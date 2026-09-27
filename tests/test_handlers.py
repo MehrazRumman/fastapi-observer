@@ -40,7 +40,9 @@ def test_build_file_handler_requires_path():
 
 def test_build_handlers_preserves_config_order(tmp_path):
     formatter = logging.Formatter("%(message)s")
-    config = ObserverConfig(handlers=["file", "console"], file_path=str(tmp_path / "api.log"))
+    config = ObserverConfig(
+        handlers=["file", "console"], file_path=str(tmp_path / "api.log")
+    )
     handlers = build_handlers(config, formatter)
 
     assert len(handlers) == 2

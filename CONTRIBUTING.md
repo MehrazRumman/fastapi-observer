@@ -6,8 +6,8 @@ Thank you for your interest in contributing!
 
 1. Fork the repository and clone your fork:
    ```bash
-   git clone https://github.com/<your-username>/fastapi-inspector.git
-   cd fastapi-inspector
+   git clone https://github.com/<your-username>/fastapi-observer.git
+   cd fastapi-observer
    ```
 
 2. Install all development dependencies:
@@ -70,7 +70,7 @@ mkdocs build        # build static site into /site
 
 ## Reporting Bugs
 
-Open an issue at <https://github.com/MehrazRumman/fastapi-inspector/issues> with:
+Open an issue at <https://github.com/MehrazRumman/fastapi-observer/issues> with:
 
 - A minimal reproducible example
 - Expected vs. actual behaviour
